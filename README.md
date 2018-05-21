@@ -2,6 +2,11 @@
 
 This package provides interfaces to various Mini Circuits USB devices.
 
+Supported devices:
+* USB-SP4T-63 switch
+* RUDAT-6000-60 attenuator
+* PWR-6GHS power sensor
+
 ### Quick Start
 
 Targeted to Python 3, works on Python 2 as well.

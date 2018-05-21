@@ -165,6 +165,9 @@ class Attenuator(SwitchAttenuatorBase):
 class Switch(SwitchAttenuatorBase):
     """
     Class for interfacing with Mini-Circuits USB switches.
+
+    Verified working:
+        - USB-SP4T-63
     """
     # Mini-Circuits USB-SP4T-63
     DEFAULT_PID = 0x22
