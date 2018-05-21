@@ -24,5 +24,6 @@ setup(name='pyminicircuits',
       entry_points="""\
       [console_scripts]
       minicircuits-attenuator = pyminicircuits.cmd.attenuator:main
+      minicircuits-switch = pyminicircuits.cmd.switch:main
       minicircuits-powersensor = pyminicircuits.cmd.powersensor:main
       """)

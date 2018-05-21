@@ -14,7 +14,7 @@ def main(argv=sys.argv):
     atten = Attenuator()
     print("Part number: %s" % atten.get_part_number())
     print("Serial: %s" % atten.get_serial())
-    if opts.value:
+    if opts.value is not None:
         print("Setting attenuation to: %f dB" % opts.value)
         atten.set_attenuation(opts.value)
     else:

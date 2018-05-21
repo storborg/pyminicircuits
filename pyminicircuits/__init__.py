@@ -124,7 +124,20 @@ class PowerSensor(BaseInterface):
         return chr(d[5]) + chr(d[6])
 
 
-class Attenuator(BaseInterface):
+class SwitchAttenuatorBase(BaseInterface):
+    CMD_GET_PART_NUMBER = 40
+    CMD_GET_SERIAL_NUMBER = 41
+
+    def get_part_number(self):
+        d = self._cmd(self.CMD_GET_PART_NUMBER)
+        return self.parse_response_string(d)
+
+    def get_serial(self):
+        d = self._cmd(self.CMD_GET_SERIAL_NUMBER)
+        return self.parse_response_string(d)
+
+
+class Attenuator(SwitchAttenuatorBase):
     """
     Class for interfacing with Mini-Circuits USB attenuators.
 
@@ -134,18 +147,8 @@ class Attenuator(BaseInterface):
     # Mini-Circuits RUDAT-6000-60
     DEFAULT_PID = 0x23
 
-    CMD_GET_PART_NUMBER = 40
-    CMD_GET_SERIAL_NUMBER = 41
     CMD_GET_ATTENUATION = 18
     CMD_SET_ATTENUATION = 19
-
-    def get_part_number(self):
-        d = self._cmd(self.CMD_GET_PART_NUMBER)
-        return self.parse_response_string(d)
-
-    def get_serial(self):
-        d = self._cmd(self.CMD_GET_SERIAL_NUMBER)
-        return self.parse_response_string(d)
 
     def get_attenuation(self):
         d = self._cmd(self.CMD_GET_ATTENUATION)
@@ -157,3 +160,29 @@ class Attenuator(BaseInterface):
         value1 = int(value)
         value2 = int((value - value1) * 4.0)
         self._cmd(self.CMD_SET_ATTENUATION, value1, value2)
+
+
+class Switch(SwitchAttenuatorBase):
+    """
+    Class for interfacing with Mini-Circuits USB switches.
+    """
+    # Mini-Circuits USB-SP4T-63
+    DEFAULT_PID = 0x22
+
+    CMD_GET_SWITCH_PORT = 15
+
+    def set_active_port(self, port):
+        """
+        Set which port is connected to the COM port: 1-indexed.
+        """
+        if port not in (1, 2, 3, 4):
+            raise ValueError("Invalid switch port: %s" % port)
+        self._cmd(port)
+
+    def get_active_port(self):
+        """
+        Return which port is connected to the COM port: 1-indexed.
+        """
+        d = self._cmd(self.CMD_GET_SWITCH_PORT)
+        port = d[1]
+        return port
