@@ -142,6 +142,7 @@ class Attenuator(SwitchAttenuatorBase):
     Class for interfacing with Mini-Circuits USB attenuators.
 
     Verified working:
+        - RCDAT-6000-110
         - RUDAT-6000-60
     """
     # Mini-Circuits RUDAT-6000-60
