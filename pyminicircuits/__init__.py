@@ -30,15 +30,26 @@ Reload the udev rules:
 class BaseInterface(object):
     DEFAULT_VID = 0x20ce
 
-    def __init__(self, vid=None, pid=None):
+    def __init__(self, vid=None, pid=None, serial=None):
         vid = vid or self.DEFAULT_VID
         pid = pid or self.DEFAULT_PID
         self.h = hid.device()
-        try:
-            self.h.open(vid, pid)
-        except OSError:
-            print(INSTALL_STEPS)
-            raise
+        if serial is None:
+            try:
+                self.h.open(vid, pid)
+            except OSError:
+                print(INSTALL_STEPS)
+                raise
+        else:
+            try:
+                dev_list = hid.enumerate()
+                for dev in dev_list:
+                    if dev.get('serial_number') == serial:
+                        self.h.open_path(dev['path'])
+            except OSError:
+                print('INVALID SERIAL NUMBER')
+                raise
+
         self.h.set_nonblocking(1)
 
     @classmethod
