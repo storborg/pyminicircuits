@@ -41,14 +41,27 @@ class BaseInterface(object):
                 print(INSTALL_STEPS)
                 raise
         else:
-            try:
-                dev_list = hid.enumerate()
-                for dev in dev_list:
-                    if dev.get('serial_number') == serial:
+            dev_list = hid.enumerate()
+            found = False
+            for dev in dev_list:
+                if (dev['vendor_id'] == vid) and (dev['product_id'] == pid):
+                    # Note: we have to do this dance where we try to open every
+                    # device, since Mini-Circuits is inconsistent about
+                    # returning HID-compliant serial numbers, so we have to use
+                    # the actual Mini-Circuits API for it.
+                    try:
                         self.h.open_path(dev['path'])
-            except OSError:
-                print('INVALID SERIAL NUMBER')
-                raise
+                    except OSError:
+                        # Device already open, skipping.
+                        pass
+                    else:
+                        if self.get_serial() == serial:
+                            found = True
+                            break
+                        else:
+                            self.h.close()
+            if not found:
+                raise ValueError("Serial number not found: %s" % serial)
 
         self.h.set_nonblocking(1)
 
