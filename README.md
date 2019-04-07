@@ -32,7 +32,7 @@ This package provides interfaces to various Mini Circuits USB devices.
 | RC4DAT-6G-95    | 4-channel attenuator  | Not supported yet               |
 | RCDAT-30G-30    | attenuator            | Might work via USB?             |
 | RCDAT-3000-63W2 | attenuator            | Might work via USB?             |
-| RCDAT-4000-120  | attenuator            | Might work via USB?             |
+| RCDAT-4000-120  | attenuator            | Verified working via USB :+1:   |
 | RCDAT-6000-30   | attenuator            | Might work via USB?             |
 | RCDAT-6000-60   | attenuator            | Might work via USB?             |
 | RCDAT-6000-90   | attenuator            | Might work via USB?             |
