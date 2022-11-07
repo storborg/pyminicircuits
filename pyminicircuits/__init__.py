@@ -1,5 +1,6 @@
 import time
 import hid
+import platform
 
 
 INSTALL_STEPS = """Failed to open device. You may need to follow these steps:
@@ -74,11 +75,16 @@ class BaseInterface(object):
             chars.append(chr(b))
         return ''.join(chars)
 
-    def _cmd(self, *data):
-        cmd = [0] * 64
-        for index, data in enumerate(data):
-            cmd[index] = data
-        self.h.write(cmd)
+    def _cmd(self, *cmd):
+        if len(cmd) > 64:
+            raise ValueError('command data length is limited to 64')
+        cmd = list(cmd) + (63-len(cmd))*[0]
+
+        if platform.system().lower() == 'windows':
+            self.h.write([0]+cmd[:-1])
+        else:
+            self.h.write(cmd)
+
         time.sleep(0.05)
         while True:
             d = self.h.read(64)
